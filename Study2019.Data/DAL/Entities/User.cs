@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Study2019.Data.DAL.Entities
 {
-    internal class User
+    public class User
     {
         public User()
         {

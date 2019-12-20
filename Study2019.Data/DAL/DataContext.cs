@@ -14,9 +14,11 @@ namespace Study2019.Data.DAL
             //Database.SetInitializer(new CreateDatabaseIfNotExists<DataContext>());
         }
 
-        internal DbSet<Entities.Avatar> Avatars { get; set; }
-        internal DbSet<Entities.User> Users { get; set; }
-        internal DbSet<Entities.Image> Images { get; set; }
+        public DbSet<Entities.Avatar> Avatars { get; set; }
+        public DbSet<Entities.User> Users { get; set; }
+        public DbSet<Entities.Image> Images { get; set; }
+        public DbSet<Entities.PostImage> PostImages { get; set; }
+        public DbSet<Entities.Post> Posts { get; set; }
 
 
 

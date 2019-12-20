@@ -8,16 +8,18 @@ using System.Threading.Tasks;
 
 namespace Study2019.Data.DAL.Entities
 {
-    public class Avatar
+    public class PostImage
     {
         [Key]
         [Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int UserId { get; set; }
+        public int PostId { get; set; }
         [Key]
         [Column(Order = 1)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ImageId { get; set; }
+        public int OrderNum { get; set; }
         public virtual Image Image { get; set; }
+
     }
 }

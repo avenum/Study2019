@@ -58,6 +58,8 @@
     <Compile Include="DAL\DataContext.cs" />
     <Compile Include="DAL\Entities\Avatar.cs" />
     <Compile Include="DAL\Entities\Image.cs" />
+    <Compile Include="DAL\Entities\Post.cs" />
+    <Compile Include="DAL\Entities\PostImage.cs" />
     <Compile Include="DAL\Entities\User.cs" />
     <Compile Include="DAL\qqq.cs" />
     <Compile Include="DTO\UserDTO.cs" />
