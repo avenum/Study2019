@@ -13,8 +13,8 @@ namespace Study2019.Data.DTO
         public string PasswordHash { get; set; }
         public string Salt { get; set; }
         public string Nickname { get; set; }
-        public System.DateTime RegDate { get; set; }
-        public DateTime Birtdate { get; set; }
+        public DateTime RegDate { get; set; }
+        public DateTime BirtDate { get; set; }
         public string Description { get; set; }
         public bool SharedProfile { get; set; }
 

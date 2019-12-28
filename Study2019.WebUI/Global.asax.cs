@@ -1,3 +1,4 @@
+using AutoMapper;
 using Newtonsoft.Json;
 using Study2019.WebUI.CustomAuth;
 using Study2019.WebUI.Models;
@@ -13,10 +14,16 @@ namespace Study2019.WebUI
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        [Obsolete]
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            AutoMapper.Mapper.Initialize(cfg => {
+                cfg.AddProfile<Data.BLL.DataProfile>();
+                cfg.AddProfile<Utils.MapperProfile>();
+            });
         }
 
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)

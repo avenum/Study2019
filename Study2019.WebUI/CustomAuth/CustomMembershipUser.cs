@@ -11,7 +11,7 @@ namespace Study2019.WebUI.CustomAuth
     {
         #region User Properties
 
-        public long UserId { get; set; }
+        public int UserId { get; set; }
         public string Nickname { get; set; }
 
 

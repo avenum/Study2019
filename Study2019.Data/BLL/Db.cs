@@ -31,19 +31,8 @@ namespace Study2019.Data.BLL
             {
                 using (var ctx = new DataContext())
                 {
-                    var user = ctx.Users.Where(x => x.Id == id || x.LoginName == Login).Select(x => new UserDTO
-                    {
-                        Birtdate = x.BirtDate,
-                        Description = x.Description,
-                        Id = x.Id,
-                        LoginName = x.LoginName,
-                        Nickname = x.Nickname,
-                        PasswordHash = x.PasswordHash,
-                        RegDate = x.RegDate,
-                        Salt = x.Salt,
-                        SharedProfile = x.IsShared
-
-                    }).FirstOrDefault();
+                    var dbUser = ctx.Users.Where(x => x.LoginName == Login || (id.HasValue && x.Id == id)).FirstOrDefault();
+                    var user = AutoMapper.Mapper.Map<DTO.UserDTO>(dbUser);
 
                     if (user != null)
                         return user;
@@ -71,16 +60,7 @@ namespace Study2019.Data.BLL
                     if (ctx.Users.Any(x => x.LoginName == user.LoginName && x.Id != dbUser.Id))
                         throw new Exception($"User with loginName :{user.LoginName} exist");
 
-                    dbUser.BirtDate = user.Birtdate;
-                    dbUser.Description = user.Description;
-                    dbUser.Id = user.Id;
-                    dbUser.LoginName = user.LoginName;
-                    dbUser.Nickname = user.Nickname;
-                    dbUser.PasswordHash = user.PasswordHash;
-                    dbUser.RegDate = user.RegDate;
-                    dbUser.Salt = user.Salt;
-                    dbUser.IsShared = user.SharedProfile;
-
+                    AutoMapper.Mapper.Map(user, dbUser);
 
 
 
