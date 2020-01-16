@@ -61,8 +61,10 @@ namespace Study2019.Data.BLL
                         throw new Exception($"User with loginName :{user.LoginName} exist");
 
                     AutoMapper.Mapper.Map(user, dbUser);
-
-
+                    if (!user.RegDate.Equals(DateTime.MinValue))
+                        dbUser.RegDate = user.RegDate;
+                    if (user.ImageAvatarId is int imgId)
+                        dbUser.Avatars.Add(new DAL.Entities.Avatar { ImageId = imgId });
 
                     ctx.SaveChanges();
 
@@ -77,6 +79,21 @@ namespace Study2019.Data.BLL
 
         }
 
+        public static DTO.ImageDTO GetImage(int id)
+        {
+            using (var ctx = new DataContext())
+                return AutoMapper.Mapper.Map<DTO.ImageDTO>(ctx.Images.Find(id));
+        }
 
+        public static int CreateImage(DTO.ImageDTO image)
+        {
+            using (var ctx = new DataContext())
+            {
+                var dbImg = ctx.Images.Add(AutoMapper.Mapper.Map<DAL.Entities.Image>(image));
+                ctx.SaveChanges();
+                return dbImg.Id;
+            }
+
+        }
     }
 }

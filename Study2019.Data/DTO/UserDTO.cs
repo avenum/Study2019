@@ -18,5 +18,8 @@ namespace Study2019.Data.DTO
         public string Description { get; set; }
         public bool SharedProfile { get; set; }
 
+        public int? ImageAvatarId { get; set; }
+
+
     }
 }

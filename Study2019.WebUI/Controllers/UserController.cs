@@ -3,10 +3,12 @@ using Study2019.WebUI.CustomAuth;
 using Study2019.WebUI.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Study2019.WebUI.Utils;
 
 namespace Study2019.WebUI.Controllers
 {
@@ -128,12 +130,37 @@ namespace Study2019.WebUI.Controllers
             return View(model);
         }
         [HttpPost]
-        public ActionResult EditProfile(HttpPostedFileBase Avatar)
+        public ActionResult EditProfile(Models.UserModel model)
         {
-            Avatar.s
-            return View();
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Error = "FormValidError";
+                return View(model);
+            }
+
+            var user = AutoMapper.Mapper.Map<Data.DTO.UserDTO>(model);
+
+            Data.BLL.Db.CreateUpdateUser(user);
+
+            return View(model);
         }
 
+
+        [HttpPost]
+        public JsonResult UploadAvatar(HttpPostedFileWrapper file)
+        {
+            var blobId = Guid.NewGuid();
+            var ba = file.InputStream.ToByteArray();
+            FileHelper.SaveFile(ba, blobId);
+            var img = new Data.DTO.ImageDTO
+            {
+                BlobId = blobId,
+                MimeType = file.ContentType,
+                UserName = User.Identity.Name
+            };
+            var id = Data.BLL.Db.CreateImage(img);
+            return Json(new { ImageId = id });
+        }
 
 
     }

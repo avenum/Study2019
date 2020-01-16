@@ -15,9 +15,12 @@ namespace Study2019.WebUI.Models
         [Required]
         public string Nickname { get; set; }
         [Required]
+        [DisplayFormat(DataFormatString ="{0:dd.MM.yyyy}")]
         public DateTime Birtdate { get; set; }
         public string Description { get; set; }
         public bool SharedProfile { get; set; }
+        public int Id { get; set; }
+        public int?  ImageAvatarId { get; set; }
 
     }
 }

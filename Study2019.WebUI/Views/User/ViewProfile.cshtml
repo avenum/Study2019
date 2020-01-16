@@ -11,12 +11,22 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
+
+        </dt>
+
+        <dd>
+            <img class="AvatarImage" title="Change" src="@Url.Action("Get", "Image", new {id=Model.ImageAvatarId })"
+                 onerror="this.onerror=null;this.src='https://placeimg.com/200/300/animals';" />
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.LoginName)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.LoginName)
         </dd>
+
 
         <dt>
             @Html.DisplayNameFor(model => model.Nickname)
