@@ -95,5 +95,33 @@ namespace Study2019.Data.BLL
             }
 
         }
+
+        public static void CreateUpdatePost(PostDTO post)
+        {
+            using (var ctx = new DataContext())
+            {
+                if (ctx.Posts.Find(post.Id) is DAL.Entities.Post dbPost)
+                {
+                    AutoMapper.Mapper.Map(post, dbPost);
+                }
+                else
+                {
+                    dbPost = ctx.Posts.Add(AutoMapper.Mapper.Map<DAL.Entities.Post>(post));
+                }
+
+                dbPost.PostImages.Clear();
+                var i = 0;
+                post.PostImages.Select(x => new DAL.Entities.PostImage()
+                {
+                    ImageId = x.Id,
+                    OrderNum = ++i
+                }).ToList().ForEach(dbPost.PostImages.Add);
+
+                ctx.SaveChanges();
+                
+
+
+            }
+        }
     }
 }

@@ -26,6 +26,14 @@ namespace Study2019.Data.BLL
                 .ForMember(x => x.Created, x => x.MapFrom(y => DateTime.Now))
                 ;
 
+            CreateMap<DAL.Entities.Post, DTO.PostDTO>()
+                .ForMember(x => x.PostImages, x => x.MapFrom(y => y.PostImages.OrderBy(q=>q.OrderNum).Select(q=>q.Image)))
+                .ReverseMap()
+                .ForMember(x => x.Created, x => x.MapFrom(y => DateTime.Now))
+                .ForMember(x => x.PostImages, x => x.Ignore())
+
+                ;
+
         }
     }
 }

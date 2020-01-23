@@ -65,8 +65,8 @@
     <Compile Include="DAL\Entities\Post.cs" />
     <Compile Include="DAL\Entities\PostImage.cs" />
     <Compile Include="DAL\Entities\User.cs" />
-    <Compile Include="DAL\qqq.cs" />
     <Compile Include="DTO\ImageDTO.cs" />
+    <Compile Include="DTO\PostDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<script>
+    function ShowModal(title, body, callback) {
+        var modal = $("#NewPostModal");
+        modal.find(".modal-title").text(title);
+        modal.find(".modal-body").html(body);
+        if (typeof (callback) == "function") {
+            var btn = modal.find(".submitButtonModal");
+            btn.unbind();
+            btn.click(callback);
+        }
+        modal.modal("show");
+    }
+    function HideModal() {
+        var modal = $("#NewPostModal");
+        modal.modal("hide");
+        modal.find(".modal-title").text("");
+        modal.find(".modal-body").html("");
+        modal.find(".submitButtonModal").unbind();
+
+    }
+    $().ready(function () {
+        $("#CreatePostButton").on("click", function (e) {
+            $.get('@Url.Action("NewPost")').done(function (res) {
+                ShowModal("New Post", res, function () {
+                    SaveForm();
+                    HideModal();
+                })
+
+            });
+
+
+        });
+        $('#NewPostModal').on('hidden.bs.modal', function (e) {
+        HideModal();
+    });
+    });
+</script>
+<div class="modal fade" id="NewPostModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary submitButtonModal">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="btn btn-primary" id="CreatePostButton">Add Post</button>
