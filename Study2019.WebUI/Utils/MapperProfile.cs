@@ -23,6 +23,11 @@ namespace Study2019.WebUI.Utils
                 .ReverseMap()
                 .ForMember(x => x.BirtDate, x => x.MapFrom(y => y.Birtdate))
                 ;
+            CreateMap<Data.DTO.PostDTO, Models.PostModel>()
+                .ForMember(x => x.ImageIds, x => x.MapFrom(y => y.PostImages))
+                .ReverseMap()
+                .ForMember(x => x.PostImages, x => x.MapFrom(y => y.ImageIds))
+                ;
 
 
         }

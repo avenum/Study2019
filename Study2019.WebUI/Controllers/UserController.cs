@@ -146,21 +146,7 @@ namespace Study2019.WebUI.Controllers
         }
 
 
-        [HttpPost]
-        public JsonResult UploadAvatar(HttpPostedFileWrapper file)
-        {
-            var blobId = Guid.NewGuid();
-            var ba = file.InputStream.ToByteArray();
-            FileHelper.SaveFile(ba, blobId);
-            var img = new Data.DTO.ImageDTO
-            {
-                BlobId = blobId,
-                MimeType = file.ContentType,
-                UserName = User.Identity.Name
-            };
-            var id = Data.BLL.Db.CreateImage(img);
-            return Json(new { ImageId = id });
-        }
+        
 
 
     }

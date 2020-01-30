@@ -19,13 +19,15 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("UploadAvatar")',
+                    url: '@Url.Action("UploadImage","Image")',
                     contentType: false,
                     processData: false,
                     data: fd,
                     success: function (result) {
-                        $("#ImageAvatarId").val(result.ImageId);
-                        $(".AvatarImage").prop("src", url_t + result.ImageId);
+                        if (Array.isArray(result)) {
+                            $("#ImageAvatarId").val(result[0]);
+                            $(".AvatarImage").prop("src", url_t + result[0]);
+                        }
                     },
                     error: function (xhr, status, p3) {
                         alert(xhr.responseText);

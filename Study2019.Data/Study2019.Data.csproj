@@ -68,9 +68,25 @@
     <Compile Include="DTO\ImageDTO.cs" />
     <Compile Include="DTO\PostDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
+    <Compile Include="Migrations\201912261551292_InitialCreate.cs" />
+    <Compile Include="Migrations\201912261551292_InitialCreate.designer.cs">
+      <DependentUpon>201912261551292_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001291609495_add_navProperty_to_posts.cs" />
+    <Compile Include="Migrations\202001291609495_add_navProperty_to_posts.designer.cs">
+      <DependentUpon>202001291609495_add_navProperty_to_posts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201912261551292_InitialCreate.resx">
+      <DependentUpon>201912261551292_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001291609495_add_navProperty_to_posts.resx">
+      <DependentUpon>202001291609495_add_navProperty_to_posts.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />

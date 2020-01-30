@@ -13,7 +13,7 @@ namespace Study2019.Data.DTO
         public int UserId { get; set; }
         public string Description { get; set; }
         public string UserNickname { get; set; }
-        public  List<ImageDTO> PostImages { get; set; }
+        public  List<int> PostImages { get; set; }
 
     }
 }

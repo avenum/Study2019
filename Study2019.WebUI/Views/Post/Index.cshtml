@@ -1,7 +1,14 @@
-﻿
+﻿@model List<Study2019.WebUI.Models.PostModel>
 @{
     ViewBag.Title = "Index";
 }
+<style>
+    .PostImage {
+        max-height: 100px;
+        max-width: 100px;
+        border-radius: 5px;
+    }
+</style>
 
 <h2>Index</h2>
 <script>
@@ -26,10 +33,9 @@
     }
     $().ready(function () {
         $("#CreatePostButton").on("click", function (e) {
-            $.get('@Url.Action("NewPost")').done(function (res) {
+            $.get('@Url.Action("CreateEdit")').done(function (res) {
                 ShowModal("New Post", res, function () {
-                    SaveForm();
-                    HideModal();
+                    SaveForm(HideModal);
                 })
 
             });
@@ -60,3 +66,22 @@
 </div>
 
 <button class="btn btn-primary" id="CreatePostButton">Add Post</button>
+
+
+
+
+@foreach (var post in Model)
+{
+    <div>
+        <p>@post.Description</p>
+        <p>@post.Created</p>
+        <p>@post.UserNickname</p>
+        <div>
+            @foreach (var imgId in post.ImageIds)
+            {
+                <img class="PostImage" title="delete" src="@Url.Action("Get", "Image")/@imgId" />
+
+            }
+        </div>
+    </div>
+}

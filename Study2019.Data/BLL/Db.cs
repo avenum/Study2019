@@ -63,7 +63,7 @@ namespace Study2019.Data.BLL
                     AutoMapper.Mapper.Map(user, dbUser);
                     if (!user.RegDate.Equals(DateTime.MinValue))
                         dbUser.RegDate = user.RegDate;
-                    if (user.ImageAvatarId is int imgId)
+                    if (user.ImageAvatarId is int imgId && !dbUser.Avatars.Any(x => x.ImageId == imgId))
                         dbUser.Avatars.Add(new DAL.Entities.Avatar { ImageId = imgId });
 
                     ctx.SaveChanges();
@@ -96,7 +96,7 @@ namespace Study2019.Data.BLL
 
         }
 
-        public static void CreateUpdatePost(PostDTO post)
+        public static int CreateUpdatePost(PostDTO post)
         {
             using (var ctx = new DataContext())
             {
@@ -113,14 +113,36 @@ namespace Study2019.Data.BLL
                 var i = 0;
                 post.PostImages.Select(x => new DAL.Entities.PostImage()
                 {
-                    ImageId = x.Id,
+                    ImageId = x,
                     OrderNum = ++i
                 }).ToList().ForEach(dbPost.PostImages.Add);
 
                 ctx.SaveChanges();
+
+                return dbPost.Id;
+            }
+        }
+
+        public static PostDTO GetPost(int id)
+        {
+            using (var ctx = new DataContext())
+                return AutoMapper.Mapper.Map<DTO.PostDTO>(ctx.Posts.Find(id));
+
+        }
+
+        public static List<PostDTO> GetPosts(int? lastId = null)
+        {
+            using (var ctx = new DataContext())
+            {
+                var posts = ctx.Posts.AsNoTracking().AsQueryable();
+                if (lastId.HasValue)
+                    posts = posts.Where(x => x.Id < lastId);
+
+
+                 return posts.OrderByDescending(x=>x.Id).Take(3).Select(AutoMapper.Mapper.Map<DTO.PostDTO>)
+                  .ToList();
                 
-
-
+                
             }
         }
     }

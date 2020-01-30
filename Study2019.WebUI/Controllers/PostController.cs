@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Study2019.WebUI.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,13 +12,25 @@ namespace Study2019.WebUI.Controllers
         // GET: Post
         public ActionResult Index()
         {
-            return View();
+            var model = Data.BLL.Db.GetPosts().Select(AutoMapper.Mapper.Map<PostModel>).ToList();
+            return View(model);
         }
 
-        public ActionResult NewPost()
+        public ActionResult CreateEdit()
         {
-            return PartialView();
+            var model = new PostModel { ImageIds = new List<int>() };
+            return PartialView(model);
         }
+
+        [HttpPost]
+        public ActionResult CreateEdit(PostModel model)
+        {
+            var post = AutoMapper.Mapper.Map<Data.DTO.PostDTO>(model);
+            post.UserId = ((CustomAuth.CustomPrincipal)User).UserId;
+            var newPost = Data.BLL.Db.GetPost(Data.BLL.Db.CreateUpdatePost(post));
+            return Json(newPost);
+        }
+
 
     }
 }

@@ -12,7 +12,7 @@ namespace Study2019.Data.DAL.Entities
         public User()
         {
             Avatars = new HashSet<Avatar>();
-            Images = new HashSet<Image>();
+            Posts = new HashSet<Post>();
         }
 
         [Key]
@@ -30,7 +30,7 @@ namespace Study2019.Data.DAL.Entities
         public bool IsShared { get; set; }
 
         public virtual ICollection<Avatar> Avatars { get; set; }
-        public virtual ICollection<Image> Images { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
 
     }
 }

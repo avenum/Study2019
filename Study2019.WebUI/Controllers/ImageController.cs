@@ -26,5 +26,29 @@ namespace Study2019.WebUI.Controllers
             else
                 return HttpNotFound("File not found");
         }
+        [HttpPost]
+        public JsonResult UploadImage()
+        {
+            var imgIds = new List<int>();
+            foreach (string fileName in Request.Files)
+            {
+                var file = Request.Files[fileName];
+
+                var blobId = Guid.NewGuid();
+                var ba = file.InputStream.ToByteArray();
+                FileHelper.SaveFile(ba, blobId);
+                var img = new Data.DTO.ImageDTO
+                {
+                    BlobId = blobId,
+                    MimeType = file.ContentType,
+                    UserName = User.Identity.Name
+                };
+                var id = Data.BLL.Db.CreateImage(img);
+                imgIds.Add(id);                
+            }
+
+            return Json(imgIds);
+
+        }
     }
 }
