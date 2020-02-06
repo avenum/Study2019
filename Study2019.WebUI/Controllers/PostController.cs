@@ -13,12 +13,20 @@ namespace Study2019.WebUI.Controllers
         public ActionResult Index()
         {
             var model = Data.BLL.Db.GetPosts().Select(AutoMapper.Mapper.Map<PostModel>).ToList();
+            model.ForEach(x =>
+            {
+                x.CanEdit = User.Identity.IsAuthenticated && x.UserId == ((CustomAuth.CustomPrincipal)User).UserId;
+            });
             return View(model);
         }
-
-        public ActionResult CreateEdit()
+        [Authorize]
+        public ActionResult CreateEdit(int? id = null)
         {
-            var model = new PostModel { ImageIds = new List<int>() };
+            PostModel model = null;
+            if (id.HasValue)
+                model = AutoMapper.Mapper.Map<PostModel>(Data.BLL.Db.GetPost(id.Value));
+            else
+                model = new PostModel { ImageIds = new List<int>() };
             return PartialView(model);
         }
 
@@ -28,9 +36,21 @@ namespace Study2019.WebUI.Controllers
             var post = AutoMapper.Mapper.Map<Data.DTO.PostDTO>(model);
             post.UserId = ((CustomAuth.CustomPrincipal)User).UserId;
             var newPost = Data.BLL.Db.GetPost(Data.BLL.Db.CreateUpdatePost(post));
-            return Json(newPost);
+            var postModel = AutoMapper.Mapper.Map<PostModel>(newPost);
+            postModel.CanEdit = true;
+            return Json(postModel);
         }
 
+        [HttpGet]
+        public JsonResult GetMorePosts(int id)
+        {
+            var model = Data.BLL.Db.GetPosts(id).Select(AutoMapper.Mapper.Map<PostModel>).ToList();
+            model.ForEach(x =>
+            {
+                x.CanEdit =User.Identity.IsAuthenticated && x.UserId == ((CustomAuth.CustomPrincipal)User).UserId;
+            });
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
 
     }
 }

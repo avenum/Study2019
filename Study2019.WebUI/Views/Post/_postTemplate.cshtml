@@ -1,0 +1,13 @@
+﻿{{#Posts}}
+    <div class="PostDiv" data-id="{{Id}}">
+        {{#CanEdit}}
+        <span class="glyphicon glyphicon-edit editPost"></span>
+        {{/CanEdit}}
+        <div class="Images">@Html.Partial("_imgTemplate")</div>
+        <div class="Descr">
+            {{Description}}
+        </div>
+        <p>{{CreatedText}}</p>
+        <p>{{UserNickname}}</p>
+    </div>
+{{/Posts}}

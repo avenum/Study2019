@@ -130,7 +130,7 @@ namespace Study2019.Data.BLL
 
         }
 
-        public static List<PostDTO> GetPosts(int? lastId = null)
+        public static List<PostDTO> GetPosts(int? lastId = null, int take=3)
         {
             using (var ctx = new DataContext())
             {
@@ -139,7 +139,7 @@ namespace Study2019.Data.BLL
                     posts = posts.Where(x => x.Id < lastId);
 
 
-                 return posts.OrderByDescending(x=>x.Id).Take(3).Select(AutoMapper.Mapper.Map<DTO.PostDTO>)
+                 return posts.OrderByDescending(x=>x.Id).Take(take).Select(AutoMapper.Mapper.Map<DTO.PostDTO>)
                   .ToList();
                 
                 

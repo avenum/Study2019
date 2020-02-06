@@ -1,11 +1,12 @@
 ﻿@model Study2019.WebUI.Models.PostModel
+@using Study2019.WebUI.Utils;
 
 @{
     ViewBag.Title = "NewPost";
     var imgTemplate = Html.Raw(Html.Partial("_imgTemplate"));
 }
 <style>
-    .PostImage {
+    .createEditForm .PostImage {
         max-height: 60px;
         max-width: 60px;
         border-radius: 5px;
@@ -48,7 +49,7 @@
                                 imageIds.push(i);
                             });
 
-                            $(".ImagesDiv").html(imgTemplate.render({"Images":imageIds}));
+                            $(".ImagesDiv").html(imgTemplate.render({"ImageIds":imageIds}));
                         }
                     },
                     error: function (xhr, status, p3) {
@@ -63,7 +64,7 @@
 
     }
 
-    function SaveForm(closeModalcb) {
+    function SaveForm(cb) {
 
         var post={
             "ImageIds": imageIds,
@@ -73,15 +74,10 @@
 
         $.post('@Url.Action("CreateEdit")', post).done(function (res) {
 
-            closeModalcb();
+            cb(res);
         });
 
-        console.log(post);
 
-
-
-
-        
     }
 </script>
 
@@ -89,7 +85,7 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
+    <div class="form-horizontal createEditForm">
         @Html.HiddenFor(x => x.Id)
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -97,7 +93,7 @@
                 Photos <span style="cursor:pointer" class="glyphicon glyphicon-plus-sign"></span>
             </label>
             <div class="col-md-offset-2 col-md-10 ImagesDiv">
-
+                @Html.Raw(TemplateHelper.Render(imgTemplate.ToString(),  Model ))
             </div>
             <div style="display:none" class="UploadLabel">
                 <input type="file" onchange="Upload(this);" accept="image/*" multiple id="Photos" name="Photos" />

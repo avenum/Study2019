@@ -1,7 +1,12 @@
 ﻿@model List<Study2019.WebUI.Models.PostModel>
+@using Study2019.WebUI.Utils;
 @{
     ViewBag.Title = "Index";
+    var postTemplate = Html.Raw(Html.Partial("_postTemplate"));
 }
+<script type="text/template" id="postTemplate">
+    @postTemplate
+</script>
 <style>
     .PostImage {
         max-height: 100px;
@@ -12,6 +17,10 @@
 
 <h2>Index</h2>
 <script>
+    var hasMorePosts = true;
+
+    var postTemplate = Hogan.compile($("#postTemplate").html());
+
     function ShowModal(title, body, callback) {
         var modal = $("#NewPostModal");
         modal.find(".modal-title").text(title);
@@ -23,6 +32,31 @@
         }
         modal.modal("show");
     }
+
+    function RenderNewPost(post) {
+        HideModal();
+        if (typeof (post) == "object") {
+            var model = { "Posts": [post] };
+            $(".Posts").prepend(postTemplate.render(model));
+        }
+
+
+    }
+    function RenderEditedPost(post) {
+        HideModal();
+        if (typeof (post) == "object") {
+            var model = { "Posts": [post] };
+            var old = $(".Posts .PostDiv[data-id='" + post.Id + "']");
+
+            old.before(postTemplate.render(model));
+            old.remove();
+        }
+
+
+    }
+
+
+
     function HideModal() {
         var modal = $("#NewPostModal");
         modal.modal("hide");
@@ -33,19 +67,57 @@
     }
     $().ready(function () {
         $("#CreatePostButton").on("click", function (e) {
-            $.get('@Url.Action("CreateEdit")').done(function (res) {
-                ShowModal("New Post", res, function () {
-                    SaveForm(HideModal);
-                })
-
-            });
+            CreateEdit(RenderNewPost);
 
 
         });
         $('#NewPostModal').on('hidden.bs.modal', function (e) {
         HideModal();
+        });
+
+    $(window).on("scroll", function() {
+        var scrollheight = $(window).scrollTop();
+        var contentHeight = $(document).height() - $(window).height();
+
+        if (contentHeight - scrollheight < 50 && hasMorePosts) {
+            GetMorePosts();
+	    }
     });
+
+        $(document).on("click", ".editPost", editClick);
     });
+
+    function editClick(e) {
+        var id = $(this).parent().data("id");
+        CreateEdit(RenderEditedPost, id);
+    }
+
+    function CreateEdit(renderCallback, id) {
+        var title = "edit post";
+        if (id == undefined) {
+            title = "new post";
+            id = "";
+        }
+        $.get('@Url.Action("CreateEdit")/' + id).done(function (res) {
+            ShowModal(title, res, function () {
+                    SaveForm(renderCallback);
+                })
+
+            });
+    }
+
+    function GetMorePosts() {
+        var lastId = $(".PostDiv").last().data("id");
+        $.get('@Url.Action("GetMorePosts")/' + lastId).done(function (res) {
+            if (Array.isArray(res)) {
+                if (res.length == 0)
+                    hasMorePosts = false
+                else
+                $(".Posts").append(postTemplate.render({ Posts: res }));
+
+            }
+        });
+    }
 </script>
 <div class="modal fade" id="NewPostModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">
@@ -68,20 +140,8 @@
 <button class="btn btn-primary" id="CreatePostButton">Add Post</button>
 
 
+<div class="Posts">
+    @Html.Raw(TemplateHelper.Render(postTemplate.ToString(), new { Posts = Model }))
+</div>
 
-
-@foreach (var post in Model)
-{
-    <div>
-        <p>@post.Description</p>
-        <p>@post.Created</p>
-        <p>@post.UserNickname</p>
-        <div>
-            @foreach (var imgId in post.ImageIds)
-            {
-                <img class="PostImage" title="delete" src="@Url.Action("Get", "Image")/@imgId" />
-
-            }
-        </div>
-    </div>
-}
+<button class="gmpButton" onclick="GetMorePosts()">get more</button>
